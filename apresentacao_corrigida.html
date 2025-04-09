@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroFamília - Apresentação para Investidores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .slide {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        .active-slide {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .progress-bar {
+            height: 4px;
+            background-color: #5EAF48;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+
+    <!-- Barra de Progresso -->
+    <div class="w-full h-1 bg-gray-300 dark:bg-gray-700">
+        <div id="progress-bar" class="progress-bar w-0"></div>
+    </div>
+
+    <!-- Controles -->
+    <div class="absolute top-4 right-4 z-10 flex space-x-2">
+        <button id="prev-btn" class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Anterior</button>
+        <button id="next-btn" class="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition">Próximo</button>
+    </div>
+
+    <!-- Contador -->
+    <div class="absolute bottom-4 right-4 z-10 bg-white dark:bg-gray-800 px-2 py-1 rounded-md shadow text-sm">
+        Slide <span id="current-slide">1</span>/<span id="total-slides">3</span>
+    </div>
+
+    <!-- Slides -->
+    <div class="slide active-slide p-10 text-center">
+        <h1 class="text-4xl font-bold text-green-600">AgroFamília</h1>
+        <p class="mt-4 text-lg">Portal do Agricultor Familiar</p>
+    </div>
+    <div class="slide p-10">
+        <h2 class="text-3xl font-semibold text-green-500 mb-4">O Problema</h2>
+        <p>Agricultores familiares têm dificuldade de acesso a informação, programas de crédito e canais de comercialização.</p>
+    </div>
+    <div class="slide p-10">
+        <h2 class="text-3xl font-semibold text-green-500 mb-4">A Solução</h2>
+        <p>Um aplicativo leve e acessível que centraliza tudo: documentação, crédito, notícias e mapeamento dos agricultores.</p>
+    </div>
+
+    <!-- Script -->
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const currentSlideEl = document.getElementById('current-slide');
+        const totalSlidesEl = document.getElementById('total-slides');
+        const progressBar = document.getElementById('progress-bar');
+
+        let currentIndex = 0;
+        totalSlidesEl.textContent = slides.length;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active-slide');
+                if (i === index) {
+                    slide.classList.add('active-slide');
+                }
+            });
+            currentSlideEl.textContent = index + 1;
+            progressBar.style.width = ((index + 1) / slides.length * 100) + "%";
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < slides.length - 1) {
+                currentIndex++;
+                showSlide(currentIndex);
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                showSlide(currentIndex);
+            }
+        });
+
+        showSlide(currentIndex);
+    </script>
+</body>
+</html>
