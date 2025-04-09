@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroFamília - Portal do Agricultor Familiar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#5D5CDE',
+                            50: '#F5F5FE',
+                            100: '#E9E9FC',
+                            200: '#D1D1F9',
+                            300: '#B8B8F7',
+                            400: '#7B7AE8',
+                            500: '#5D5CDE',
+                            600: '#3433D3',
+                            700: '#2928AB',
+                            800: '#1F1E80',
+                            900: '#151456',
+                        },
+                        green: {
+                            50: '#F3FAEB',
+                            100: '#E7F6D7',
+                            200: '#D0EDC0',
+                            300: '#B8E3A8',
+                            400: '#93D07F',
+                            500: '#5EAF48',
+                            600: '#47883B',
+                            700: '#376A2E',
+                            800: '#2C5525',
+                            900: '#1E3919',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Estilo para o estado ativo das abas */
+        .active-tab {
+            color: #5EAF48;
+            border-bottom: 3px solid #5EAF48;
+            font-weight: bold;
+        }
+        
+        /* Estilo para o mapa */
+        .map-marker {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #5D5CDE;
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
+        
+        .tooltip {
+            visibility: hidden;
+            background-color: #fff;
+            color: #333;
+            text-align: center;
+            padding: 5px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            width: 120px;
+        }
+        
+        .map-marker:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .dark .tooltip {
+            background-color: #333;
+            color: #fff;
+        }
+        
+        /* Animações */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Estilo para esconder elementos */
+        .hidden {
+            display: none;
+        }
+
+        /* Estilo para o dark mode */
+        .dark {
+            color-scheme: dark;
+        }
+
+        .dark body {
+            background-color: #181818;
+            color: #fff;
+        }
+
+        /* Transições suaves */
+        .tab-content {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 min-h-screen">
+    <!-- Cabeçalho -->
+    <header class="bg-green-500 text-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center mb-3 md:mb-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.5 17a4.5 4.5 0 01-1.44-8.765 4.5 4.5 0 018.302-3.046 3.5 3.5 0 014.504 4.272A4 4 0 0115 17H5.5zm3.75-2.75a.75.75 0 001.5 0V9.66l1.95 2.1a.75.75 0 101.1-1.02l-3.25-3.5a.75.75 0 00-1.1 0l-3.25 3.5a.75.75 0 101.1 1.02l1.95-2.1v4.59z" clip-rule="evenodd" />
+                </svg>
+                <h1 class="text-xl font-bold">AgroFamília</h1>
+            </div>
+            <div class="text-sm md:text-base">
+                <p>Portal do Agricultor Familiar</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-10">
+        <div class="container mx-auto px-4">
+            <div class="flex overflow-x-auto whitespace-nowrap py-2 scrollbar-hide">
+                <button class="tab-button active-tab px-4 py-2 mx-1 text-sm md:text-base" data-target="inicio">Início</button>
+                <button class="tab-button px-4 py-2 mx-1 text-sm md:text-base" data-target="cadastro">Cadastro</button>
+                <button class="tab-button px-4 py-2 mx-1 text-sm md:text-base" data-target="documentacao">Documentação</button>
+                <button class="tab-button px-4 py-2 mx-1 text-sm md:text-base" data-target="recursos">Programas de Recursos</button>
+                <button class="tab-button px-4 py-2 mx-1 text-sm md:text-base" data-target="venda">Programas de Venda</button>
+                <button class="tab-button px-4 py-2 mx-1 text-sm md:text-base" data-target="noticias">Notícias</button>
+                <button class="tab-button px-4 py-2 mx-1 text-sm md:text-base" data-target="mapa">Mapa</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- Seção Início -->
+        <section id="inicio" class="tab-content fade-in">
+            <div class="bg-green-50 dark:bg-gray-800 rounded-lg p-6 mb-6 shadow-md">
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-4">Bem-vindo ao Portal AgroFamília</h2>
+                <p class="mb-4">Este portal foi desenvolvido para auxiliar agricultores familiares a acessarem informações sobre:</p>
+                <ul class="list-disc pl-6 mb-4 space-y-2">
+                    <li>Documentação necessária para regularização</li>
+                    <li>Programas governamentais para captação de recursos</li>
+                    <li>Oportunidades de venda direta e escoamento da produção</li>
+                    <li>Notícias atualizadas sobre agricultura familiar</li>
+                </ul>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <h3 class="font-bold">Documentação</h3>
+                        <p class="text-sm">Orientações sobre carteira de produtor rural, DAP e CAF</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="font-bold">Recursos</h3>
+                        <p class="text-sm">Informações sobre PRONAMP, PRONAF e outros programas</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow text-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-green-500 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <h3 class="font-bold">Venda</h3>
+                        <p class="text-sm">Como participar de programas como PAA e PAD</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Por que se regularizar?</h3>
+                <div class="space-y-4">
+                    <p>A regularização do agricultor familiar proporciona:</p>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Acesso a linhas de crédito com juros reduzidos</li>
+                        <li>Possibilidade de vender para programas governamentais</li>
+                        <li>Assistência técnica especializada</li>
+                        <li>Participação em políticas públicas específicas</li>
+                        <li>Benefícios previdenciários</li>
+                    </ul>
+                    <p class="mt-4 font-semibold">Comece agora mesmo fazendo seu cadastro e consultando as informações disponíveis!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Cadastro -->
+        <section id="cadastro" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-4">Cadastro de Agricultor Familiar</h2>
+                <p class="mb-6">Preencha os dados abaixo para se cadastrar em nosso sistema. Estas informações serão usadas para mapeamento e direcionamento de conteúdo relevante.</p>
+                
+                <form id="cadastro-form" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="nome" class="block text-sm font-medium mb-1">Nome completo</label>
+                            <input type="text" id="nome" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" required>
+                        </div>
+                        <div>
+                            <label for="cpf" class="block text-sm font-medium mb-1">CPF</label>
+                            <input type="text" id="cpf" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" placeholder="000.000.000-00" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="email" class="block text-sm font-medium mb-1">E-mail</label>
+                            <input type="email" id="email" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" required>
+                        </div>
+                        <div>
+                            <label for="telefone" class="block text-sm font-medium mb-1">Telefone</label>
+                            <input type="tel" id="telefone" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" placeholder="(00) 00000-0000" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="endereco" class="block text-sm font-medium mb-1">Endereço da propriedade</label>
+                        <input type="text" id="endereco" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" required>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label for="municipio" class="block text-sm font-medium mb-1">Município</label>
+                            <input type="text" id="municipio" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" required>
+                        </div>
+                        <div>
+                            <label for="estado" class="block text-sm font-medium mb-1">Estado</label>
+                            <select id="estado" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" required>
+                                <option value="">Selecione...</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="cep" class="block text-sm font-medium mb-1">CEP</label>
+                            <input type="text" id="cep" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" placeholder="00000-000" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="produtos" class="block text-sm font-medium mb-1">Principais produtos cultivados</label>
+                        <textarea id="produtos" rows="3" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" placeholder="Ex: milho, feijão, hortaliças, leite, etc." required></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="tamanho" class="block text-sm font-medium mb-1">Tamanho aproximado da propriedade (hectares)</label>
+                        <input type="number" id="tamanho" min="0" step="0.01" class="w-full px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600" required>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" id="dap" class="h-4 w-4 text-green-500 focus:ring-green-400">
+                        <label for="dap" class="ml-2 text-sm">Já possuo DAP ou CAF</label>
+                    </div>
+                    
+                    <div class="flex justify-end pt-4">
+                        <button type="submit" class="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="bg-green-50 dark:bg-gray-700 rounded-lg p-6 shadow-md">
+                <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Próximos passos após o cadastro</h3>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>Consulte a seção de <strong>Documentação</strong> para obter a Carteira de Produtor Rural, DAP ou CAF</li>
+                    <li>Acesse a seção de <strong>Programas de Recursos</strong> para conhecer as linhas de crédito disponíveis</li>
+                    <li>Saiba como vender seus produtos através dos programas governamentais na seção <strong>Programas de Venda</strong></li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Seção Documentação -->
+        <section id="documentacao" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="col-span-1 md:col-span-3">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+                        <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-4">Documentação Necessária</h2>
+                        <p class="mb-4">Nesta seção, você encontrará informações sobre os documentos essenciais para agricultores familiares se formalizarem e acessarem programas governamentais.</p>
+                    </div>
+                </div>
+                
+                <!-- Carteira de Produtor Rural -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Carteira de Produtor Rural</h3>
+                    <p class="mb-4">A Carteira de Produtor Rural é um documento essencial que identifica o agricultor familiar e permite que ele comercialize seus produtos diretamente para o consumidor final.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Documentos necessários:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Documento de identidade (RG)</li>
+                        <li>CPF</li>
+                        <li>Comprovante de residência</li>
+                        <li>Documento que comprove a posse da terra (matrícula, contrato de arrendamento, etc.)</li>
+                        <li>Nota fiscal de produtor rural (para renovação)</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Onde solicitar:</h4>
+                    <p>Secretaria da Fazenda do seu estado ou na Prefeitura Municipal, geralmente no setor de agricultura ou tributação.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Validade:</h4>
+                    <p>Geralmente 1 a 3 anos, dependendo do estado.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Benefícios:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Emissão de notas fiscais</li>
+                        <li>Isenção de ICMS em muitos estados</li>
+                        <li>Comprovação da condição de produtor rural</li>
+                        <li>Acesso a programas de comercialização</li>
+                    </ul>
+                </div>
+                
+                <!-- DAP -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">DAP - Declaração de Aptidão ao Pronaf</h3>
+                    <p class="mb-4">A DAP é o documento que identifica e qualifica os agricultores familiares para acessarem as políticas públicas direcionadas a esta categoria.</p>
+                    
+                    <div class="bg-yellow-50 dark:bg-yellow-900/30 p-3 rounded-lg mb-4">
+                        <p class="text-yellow-800 dark:text-yellow-200 text-sm"><strong>Atenção:</strong> A DAP está sendo substituída gradualmente pelo CAF (Cadastro Nacional da Agricultura Familiar).</p>
+                    </div>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Documentos necessários:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Documento de identidade do casal (se for o caso)</li>
+                        <li>CPF do casal (se for o caso)</li>
+                        <li>Certidão de casamento ou declaração de união estável (se for o caso)</li>
+                        <li>Documento do imóvel rural</li>
+                        <li>Comprovantes de renda agrícola e não agrícola</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Onde solicitar:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Sindicatos rurais</li>
+                        <li>EMATER (Empresa de Assistência Técnica e Extensão Rural)</li>
+                        <li>Secretarias de Agricultura</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Validade:</h4>
+                    <p>2 anos</p>
+                </div>
+                
+                <!-- CAF -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">CAF - Cadastro Nacional da Agricultura Familiar</h3>
+                    <p class="mb-4">O CAF é o novo instrumento que substitui a DAP, sendo utilizado para identificação e qualificação da Unidade Familiar de Produção Agrária (UFPA) e empreendimentos familiares rurais.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Documentos necessários:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Documentos pessoais de todos os membros da família (RG e CPF)</li>
+                        <li>Comprovante de estado civil</li>
+                        <li>Comprovante de endereço</li>
+                        <li>Documentação do imóvel rural</li>
+                        <li>Comprovantes de renda bruta familiar dos últimos 12 meses</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Onde solicitar:</h4>
+                    <p>As entidades emissoras do CAF são:</p>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Empresas de Assistência Técnica e Extensão Rural (EMATER, EMPAER, etc.)</li>
+                        <li>Sindicatos de Trabalhadores Rurais credenciados</li>
+                        <li>Entidades públicas autorizadas</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Validade:</h4>
+                    <p>2 anos</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Benefícios do CAF:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Acesso ao PRONAF e outros programas de crédito rural</li>
+                        <li>Participação em programas de compras institucionais (PAA, PNAE)</li>
+                        <li>Acesso ao Programa Nacional de Habitação Rural (PNHR)</li>
+                        <li>Benefícios previdenciários como Segurado Especial</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-green-50 dark:bg-gray-700 rounded-lg p-6 shadow-md mt-6">
+                <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Dicas importantes</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Mantenha seus documentos sempre atualizados</li>
+                    <li>Guarde todas as notas fiscais de venda e compra para comprovar sua atividade rural</li>
+                    <li>Procure orientação técnica para elaborar projetos para acesso ao crédito</li>
+                    <li>Fique atento aos prazos de renovação dos documentos</li>
+                    <li>Participe de organizações coletivas (associações, cooperativas) para fortalecer sua atividade</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Seção Programas de Recursos -->
+        <section id="recursos" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-4">Programas de Captação de Recursos e Insumos</h2>
+                <p class="mb-4">Conheça os principais programas governamentais disponíveis para agricultores familiares obterem crédito, financiamento e insumos para produção.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- PRONAF -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">PRONAF - Programa Nacional de Fortalecimento da Agricultura Familiar</h3>
+                    
+                    <p class="mb-4">Principal programa de crédito destinado aos agricultores familiares com condições especiais de financiamento.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Linhas de crédito disponíveis:</h4>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>PRONAF Custeio:</strong> Financiamento de atividades agropecuárias e de beneficiamento</li>
+                        <li><strong>PRONAF Investimento:</strong> Financiamento de máquinas, equipamentos e infraestrutura</li>
+                        <li><strong>PRONAF Agroecologia:</strong> Sistemas de produção agroecológicos ou orgânicos</li>
+                        <li><strong>PRONAF Mais Alimentos:</strong> Investimentos em infraestrutura produtiva</li>
+                        <li><strong>PRONAF Agroindústria:</strong> Beneficiamento, processamento e comercialização</li>
+                        <li><strong>PRONAF Floresta:</strong> Sistemas agroflorestais e manejo florestal</li>
+                        <li><strong>PRONAF Mulher:</strong> Atendimento específico para mulheres agricultoras</li>
+                        <li><strong>PRONAF Jovem:</strong> Linha específica para jovens agricultores</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Requisitos básicos:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Possuir DAP ou CAF ativa</li>
+                        <li>Enquadrar-se nos limites de renda bruta familiar anual (varia conforme a linha)</li>
+                        <li>Comprovar capacidade de pagamento</li>
+                        <li>Apresentar projeto técnico para algumas linhas</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Onde solicitar:</h4>
+                    <p>Bancos credenciados: Banco do Brasil, Banco do Nordeste, Caixa Econômica Federal, Banco da Amazônia e cooperativas de crédito.</p>
+                </div>
+                
+                <!-- PRONAMP -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">PRONAMP - Programa Nacional de Apoio ao Médio Produtor Rural</h3>
+                    
+                    <p class="mb-4">Programa voltado para médios produtores rurais, que pode beneficiar agricultores familiares em fase de expansão.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Finalidades:</h4>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Custeio:</strong> Financiar despesas normais do ciclo produtivo</li>
+                        <li><strong>Investimento:</strong> Financiar implantação, ampliação ou modernização da estrutura produtiva</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Requisitos básicos:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Renda bruta anual de até R$ 2 milhões</li>
+                        <li>No mínimo 80% da renda deve ser proveniente da atividade agropecuária</li>
+                        <li>Apresentar garantias compatíveis com o valor financiado</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Onde solicitar:</h4>
+                    <p>Banco do Brasil, Bradesco, Itaú, Santander, entre outros bancos credenciados pelo BNDES.</p>
+                </div>
+                
+                <!-- PAIS -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">PAIS - Produção Agroecológica Integrada e Sustentável</h3>
+                    
+                    <p class="mb-4">Tecnologia social que integra técnicas de produção agroecológica com princípios de sustentabilidade.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Características:</h4>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Sistema de produção em formato circular</li>
+                        <li>Integração de hortaliças, frutas e criação animal</li>
+                        <li>Aproveitamento de resíduos orgânicos</li>
+                        <li>Técnicas de compostagem e adubação orgânica</li>
+                        <li>Irrigação por gotejamento</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Benefícios:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Produção diversificada e de alto valor nutritivo</li>
+                        <li>Baixo custo de implementação</li>
+                        <li>Redução de insumos externos</li>
+                        <li>Segurança alimentar e geração de renda</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Como acessar:</h4>
+                    <p>Por meio da EMATER, EMBRAPA, SEBRAE, Fundação Banco do Brasil ou organizações não governamentais que promovem o PAIS.</p>
+                </div>
+                
+                <!-- Outros Programas -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Outros Programas e Fontes de Recursos</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Programa ABC - Agricultura de Baixo Carbono</h4>
+                            <p>Financiamento para práticas sustentáveis que reduzem emissões de gases de efeito estufa, como sistemas agroflorestais e recuperação de pastagens degradadas.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">SEAF - Seguro da Agricultura Familiar</h4>
+                            <p>Seguro que cobre perdas causadas por fenômenos climáticos, doenças e pragas sem controle conhecido. Está vinculado ao PRONAF Custeio.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">PGPAF - Programa de Garantia de Preços para Agricultura Familiar</h4>
+                            <p>Garante aos agricultores familiares que acessam o PRONAF um desconto no pagamento do financiamento quando os preços de mercado estiverem abaixo do custo de produção.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">PNCF - Programa Nacional de Crédito Fundiário</h4>
+                            <p>Financiamento para aquisição de imóveis rurais e investimentos em infraestrutura básica por agricultores sem terra ou com pouca terra.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">ATER - Assistência Técnica e Extensão Rural</h4>
+                            <p>Serviços gratuitos de assistência técnica e extensão rural para agricultores familiares, oferecidos por entidades governamentais como a EMATER.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-green-50 dark:bg-gray-700 rounded-lg p-6 shadow-md mt-6">
+                <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Dicas para acessar programas de recursos</h3>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>Mantenha sua DAP ou CAF sempre atualizada</li>
+                    <li>Procure assistência técnica para elaborar projetos viáveis</li>
+                    <li>Organize sua documentação pessoal e da propriedade</li>
+                    <li>Mantenha um histórico de produção e comercialização</li>
+                    <li>Participe de organizações coletivas (associações, cooperativas)</li>
+                    <li>Acompanhe os períodos de liberação de crédito (Plano Safra)</li>
+                    <li>Considere alternativas agroecológicas para reduzir custos de produção</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Seção Programas de Venda -->
+        <section id="venda" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-4">Programas de Venda Direta e Escoamento da Produção</h2>
+                <p class="mb-4">Conheça os principais programas governamentais que permitem a comercialização dos produtos da agricultura familiar.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- PAA -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">PAA - Programa de Aquisição de Alimentos</h3>
+                    
+                    <p class="mb-4">Programa que permite a compra direta de alimentos produzidos pela agricultura familiar para doação a pessoas em situação de insegurança alimentar e nutricional e para formação de estoques públicos.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Modalidades:</h4>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Compra com Doação Simultânea:</strong> Alimentos adquiridos da agricultura familiar são doados para entidades da rede socioassistencial</li>
+                        <li><strong>Compra Direta:</strong> Aquisição de produtos específicos para sustentar preços</li>
+                        <li><strong>Apoio à Formação de Estoques:</strong> Apoio financeiro para a constituição de estoques de alimentos por organizações fornecedoras</li>
+                        <li><strong>Compra Institucional:</strong> Compra de alimentos por órgãos da União, estados, Distrito Federal e municípios</li>
+                        <li><strong>PAA Leite:</strong> Aquisição de leite de vaca e de cabra de agricultores familiares</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Requisitos básicos:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Possuir DAP ou CAF ativa</li>
+                        <li>Produzir alimentos conforme as normas sanitárias</li>
+                        <li>Preferência para mulheres, comunidades tradicionais e assentados da reforma agrária</li>
+                        <li>Limite de venda anual por unidade familiar (verificar valores atualizados)</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Como participar:</h4>
+                    <p>Por meio das organizações fornecedoras (associações/cooperativas), da CONAB (Companhia Nacional de Abastecimento) ou dos órgãos compradores (para a modalidade Compra Institucional).</p>
+                </div>
+                
+                <!-- PNAE -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">PNAE - Programa Nacional de Alimentação Escolar</h3>
+                    
+                    <p class="mb-4">Programa que determina que no mínimo 30% dos recursos repassados pelo FNDE para alimentação escolar devem ser utilizados na compra de produtos da agricultura familiar.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Características principais:</h4>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li>Venda direta para escolas públicas e filantrópicas</li>
+                        <li>Valorização de produtos locais e da safra</li>
+                        <li>Prioridade para alimentos orgânicos e agroecológicos</li>
+                        <li>Possibilidade de agregação de valor (produtos minimamente processados)</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Requisitos básicos:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Possuir DAP ou CAF ativa</li>
+                        <li>Atender às normas sanitárias para os produtos</li>
+                        <li>Participar das chamadas públicas divulgadas pelas prefeituras</li>
+                        <li>Limite de venda por agricultor familiar por ano (verificar valores atualizados)</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Como participar:</h4>
+                    <p>Acompanhar as chamadas públicas publicadas pelas secretarias de educação dos municípios e estados e preparar a documentação necessária (projeto de venda, declaração de produção própria e outros).</p>
+                </div>
+                
+                <!-- Feiras Livres e Vendas Diretas -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Feiras Livres e Vendas Diretas</h3>
+                    
+                    <p class="mb-4">Canais de comercialização direta que aproximam produtores e consumidores, reduzindo intermediários e aumentando a renda dos agricultores.</p>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Tipos de feiras e vendas diretas:</h4>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Feiras da Agricultura Familiar:</strong> Espaços específicos para venda de produtos da agricultura familiar</li>
+                        <li><strong>Feiras Agroecológicas:</strong> Comercialização de produtos orgânicos e agroecológicos</li>
+                        <li><strong>Feiras Municipais:</strong> Organizadas pelas prefeituras</li>
+                        <li><strong>Vendas na propriedade:</strong> Comercialização direta na propriedade rural</li>
+                        <li><strong>Cestas e entrega a domicílio:</strong> Sistemas de entrega direta aos consumidores</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Requisitos básicos:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Carteira de Produtor Rural</li>
+                        <li>Autorização da vigilância sanitária para alguns produtos</li>
+                        <li>Cadastro junto às prefeituras para participação em feiras municipais</li>
+                    </ul>
+                    
+                    <h4 class="font-semibold mt-4 mb-2">Dicas para vendas diretas:</h4>
+                    <ul class="list-disc pl-6 space-y-1">
+                        <li>Invista na apresentação e qualidade dos produtos</li>
+                        <li>Desenvolva uma relação de confiança com os consumidores</li>
+                        <li>Estabeleça preços justos e competitivos</li>
+                        <li>Crie materiais simples de divulgação (cartões, etiquetas)</li>
+                        <li>Explore redes sociais para divulgar seus produtos</li>
+                    </ul>
+                </div>
+                
+                <!-- Outros Canais -->
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                    <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Outros Canais de Comercialização</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="font-semibold mb-2">Compras Públicas</h4>
+                            <p>Além do PAA e PNAE, existem outras modalidades de compras públicas que podem ser acessadas por agricultores familiares, como fornecimento para hospitais, presídios e outros órgãos públicos.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">Redes e Circuitos Curtos</h4>
+                            <p>Articulações entre produtores e consumidores que valorizam produtos locais, como CSAs (Comunidades que Sustentam a Agricultura), grupos de consumo responsável e cooperativas de consumidores.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">Mercados Institucionais Privados</h4>
+                            <p>Restaurantes, hotéis, mercados e empórios que valorizam produtos locais, artesanais e da agricultura familiar.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">Plataformas Digitais</h4>
+                            <p>Aplicativos e sites que conectam produtores e consumidores, facilitando a comercialização direta de produtos da agricultura familiar.</p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-semibold mb-2">Cooperativas e Associações</h4>
+                            <p>Organizações coletivas que permitem ganhar escala, agregar valor aos produtos e acessar mercados maiores.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-green-50 dark:bg-gray-700 rounded-lg p-6 shadow-md mt-6">
+                <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-4">Dicas para melhorar a comercialização</h3>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>Organize-se coletivamente em associações ou cooperativas</li>
+                    <li>Diversifique os canais de comercialização</li>
+                    <li>Invista em produtos diferenciados (orgânicos, agroecológicos, tradicionais)</li>
+                    <li>Melhore a apresentação e embalagem dos produtos</li>
+                    <li>Planeje a produção de acordo com a demanda dos mercados</li>
+                    <li>Mantenha a regularidade no fornecimento</li>
+                    <li>Busque capacitação em gestão e comercialização</li>
+                    <li>Utilize as redes sociais para divulgar seus produtos</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Seção Notícias -->
+        <section id="noticias" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-4">Notícias sobre Agricultura Familiar</h2>
+                <p class="mb-4">Acompanhe as últimas notícias sobre agricultura familiar, agroecologia e temas relacionados ao direito à alimentação saudável.</p>
+                
+                <div class="flex justify-between items-center mt-4">
+                    <div>
+                        <label for="news-filter" class="block text-sm font-medium mb-1">Filtrar por tema:</label>
+                        <select id="news-filter" class="px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600">
+                            <option value="todos">Todos os temas</option>
+                            <option value="agricultura-familiar">Agricultura Familiar</option>
+                            <option value="agroecologia">Agroecologia</option>
+                            <option value="programas-governo">Programas Governamentais</option>
+                            <option value="alimentacao">Alimentação Saudável</option>
+                        </select>
+                    </div>
+                    <button id="refresh-news" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                        </svg>
+                        Atualizar
+                    </button>
+                </div>
+            </div>
+            
+            <div id="news-loading" class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md flex justify-center items-center">
+                <svg class="animate-spin h-10 w-10 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span class="ml-2">Carregando notícias...</span>
+            </div>
+            
+            <div id="news-container" class="space-y-4 hidden">
+                <!-- Aqui serão carregadas as notícias dinamicamente -->
+            </div>
+            
+            <div id="news-error" class="bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 p-4 rounded-lg mt-4 hidden">
+                <p>Ocorreu um erro ao carregar as notícias. Por favor, tente novamente mais tarde.</p>
+            </div>
+        </section>
+
+        <!-- Seção Mapa -->
+        <section id="mapa" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md mb-6">
+                <h2 class="text-2xl font-bold text-green-600 dark:text-green-400 mb-4">Mapa de Agricultores</h2>
+                <p class="mb-4">Visualize a distribuição dos agricultores familiares cadastrados em nosso sistema.</p>
+                
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 mt-4">
+                    <div class="flex flex-wrap gap-2">
+                        <div>
+                            <label for="map-filter-state" class="block text-sm font-medium mb-1">Estado:</label>
+                            <select id="map-filter-state" class="px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600">
+                                <option value="todos">Todos</option>
+                                <!-- Estados serão preenchidos dinamicamente -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="map-filter-city" class="block text-sm font-medium mb-1">Município:</label>
+                            <select id="map-filter-city" class="px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600">
+                                <option value="todos">Todos</option>
+                                <!-- Municípios serão preenchidos dinamicamente -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="map-filter-product" class="block text-sm font-medium mb-1">Produto:</label>
+                            <select id="map-filter-product" class="px-3 py-2 border rounded-md text-base dark:bg-gray-700 dark:border-gray-600">
+                                <option value="todos">Todos</option>
+                                <!-- Produtos serão preenchidos dinamicamente -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+                <div id="map-container" class="relative w-full h-[400px] bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                    <div id="br-map" class="relative w-full h-full">
+                        <!-- Mapa do Brasil será desenhado aqui -->
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <svg width="80%" height="80%" viewBox="0 0 800 800" id="brazil-map">
+                                <!-- Representação simplificada do mapa do Brasil -->
+                                <path d="M300,150 Q450,100 550,200 Q650,300 600,450 Q550,600 450,650 Q350,700 250,600 Q150,500 200,350 Q250,200 300,150 Z" fill="none" stroke="#DDD" stroke-width="2" class="dark:stroke-gray-600" />
+                                <text x="400" y="400" text-anchor="middle" class="text-sm fill-gray-500 dark:fill-gray-400">Mapa do Brasil</text>
+                                <!-- Pontos de agricultores serão adicionados aqui -->
+                            </svg>
+                        </div>
+                    </div>
+                    <div id="map-info" class="absolute top-2 left-2 bg-white dark:bg-gray-800 p-2 rounded shadow-md text-sm">
+                        <span id="map-count">0</span> agricultores exibidos
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
+                    <p>O mapa mostra a localização aproximada dos agricultores cadastrados.</p>
+                    <p>Passe o mouse sobre os pontos para ver mais informações.</p>
+                </div>
+                
+                <div id="map-details" class="mt-6 bg-green-50 dark:bg-gray-700 p-4 rounded-lg hidden">
+                    <h3 class="font-bold text-lg mb-2">Detalhes do Agricultor</h3>
+                    <div id="map-details-content">
+                        <!-- Detalhes do agricultor selecionado serão exibidos aqui -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="bg-green-600 text-white py-6 mt-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-lg font-bold mb-2">AgroFamília</h3>
+                    <p class="text-sm">Portal do Agricultor Familiar</p>
+                </div>
+                <div class="text-center md:text-right">
+                    <p class="text-sm mb-2">Desenvolvido para auxiliar agricultores familiares</p>
+                    <p class="text-xs">© 2023 AgroFamília - Todos os direitos reservados</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Verificar preferência de tema (claro/escuro)
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        // Navegação por abas
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Função para mostrar uma aba específica
+            function showTab(tabId) {
+                // Esconder todos os conteúdos de abas
+                tabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+                
+                // Remover a classe "active" de todos os botões
+                tabButtons.forEach(button => {
+                    button.classList.remove('active-tab');
+                });
+                
+                // Mostrar o conteúdo da aba selecionada
+                const selectedTab = document.getElementById(tabId);
+                if (selectedTab) {
+                    selectedTab.classList.remove('hidden');
+                }
+                
+                // Adicionar a classe "active" ao botão selecionado
+                const selectedButton = document.querySelector(`.tab-button[data-target="${tabId}"]`);
+                if (selectedButton) {
+                    selectedButton.classList.add('active-tab');
+                }
+            }
+            
+            // Adicionar ouvintes de evento para os botões de aba
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-target');
+                    showTab(tabId);
+                    
+                    // Carregar conteúdo específico para certas abas
+                    if (tabId === 'noticias') {
+                        loadNews();
+                    } else if (tabId === 'mapa') {
+                        initMap();
+                    }
+                });
+            });
+            
+            // Mostrar a aba inicial por padrão
+            showTab('inicio');
+            
+            // Formulário de cadastro
+            const cadastroForm = document.getElementById('cadastro-form');
+            if (cadastroForm) {
+                cadastroForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    // Coletar dados do formulário
+                    const formData = {
+                        nome: document.getElementById('nome').value,
+                        cpf: document.getElementById('cpf').value,
+                        email: document.getElementById('email').value,
+                        telefone: document.getElementById('telefone').value,
+                        endereco: document.getElementById('endereco').value,
+                        municipio: document.getElementById('municipio').value,
+                        estado: document.getElementById('estado').value,
+                        cep: document.getElementById('cep').value,
+                        produtos: document.getElementById('produtos').value,
+                        tamanho: document.getElementById('tamanho').value,
+                        dap: document.getElementById('dap').checked
+                    };
+                    
+                    // Armazenar dados (simulando, já que localStorage não está disponível)
+                    saveAgricultor(formData);
+                    
+                    // Limpar formulário
+                    cadastroForm.reset();
+                    
+                    // Mostrar mensagem de sucesso
+                    alert('Cadastro realizado com sucesso!');
+                });
+            }
+            
+            // Botão de atualizar notícias
+            const refreshNewsButton = document.getElementById('refresh-news');
+            if (refreshNewsButton) {
+                refreshNewsButton.addEventListener('click', function() {
+                    loadNews();
+                });
+            }
+            
+            // Filtro de notícias
+            const newsFilter = document.getElementById('news-filter');
+            if (newsFilter) {
+                newsFilter.addEventListener('change', function() {
+                    filterNews(this.value);
+                });
+            }
+            
+            // Iniciar com alguns agricultores de exemplo
+            initSampleData();
+        });
+        
+        // Array para armazenar agricultores cadastrados (simulando um banco de dados)
+        let agricultores = [];
+        
+        // Função para salvar agricultor (simulando persistência)
+        function saveAgricultor(agricultor) {
+            // Gerar um ID aleatório
+            agricultor.id = Math.floor(Math.random() * 1000000);
+            
+            // Adicionar coordenadas aleatórias para o mapa
+            agricultor.coords = {
+                x: 100 + Math.random() * 600,  // Posição X no SVG
+                y: 100 + Math.random() * 600   // Posição Y no SVG
+            };
+            
+            // Adicionar ao array
+            agricultores.push(agricultor);
+            
+            // Atualizar mapa se estiver visível
+            const mapaSection = document.getElementById('mapa');
+            if (!mapaSection.classList.contains('hidden')) {
+                updateMap();
+            }
+        }
+        
+        // Dados de exemplo para inicialização
+        function initSampleData() {
+            const sampleData = [
+                {
+                    id: 1,
+                    nome: "João Silva",
+                    cpf: "123.456.789-00",
+                    email: "joao@exemplo.com",
+                    telefone: "(11) 98765-4321",
+                    endereco: "Sítio Boa Esperança",
+                    municipio: "Campinas",
+                    estado: "SP",
+                    cep: "13100-000",
+                    produtos: "Hortaliças orgânicas, milho e feijão",
+                    tamanho: 5,
+                    dap: true,
+                    coords: { x: 400, y: 400 }
+                },
+                {
+                    id: 2,
+                    nome: "Maria Oliveira",
+                    cpf: "987.654.321-00",
+                    email: "maria@exemplo.com",
+                    telefone: "(85) 91234-5678",
+                    endereco: "Fazenda Sol Nascente",
+                    municipio: "Fortaleza",
+                    estado: "CE",
+                    cep: "60000-000",
+                    produtos: "Frutas tropicais, mandioca",
+                    tamanho: 3,
+                    dap: true,
+                    coords: { x: 550, y: 200 }
+                },
+                {
+                    id: 3,
+                    nome: "José Santos",
+                    cpf: "456.789.123-00",
+                    email: "jose@exemplo.com",
+                    telefone: "(51) 98765-1234",
+                    endereco: "Sítio Arroio Feliz",
+                    municipio: "Porto Alegre",
+                    estado: "RS",
+                    cep: "90000-000",
+                    produtos: "Leite, queijos e embutidos",
+                    tamanho: 12,
+                    dap: false,
+                    coords: { x: 300, y: 600 }
+                },
+                {
+                    id: 4,
+                    nome: "Ana Souza",
+                    cpf: "789.123.456-00",
+                    email: "ana@exemplo.com",
+                    telefone: "(67) 94321-8765",
+                    endereco: "Chácara Primavera",
+                    municipio: "Campo Grande",
+                    estado: "MS",
+                    cep: "79000-000",
+                    produtos: "Mel, própolis e derivados",
+                    tamanho: 2,
+                    dap: true,
+                    coords: { x: 300, y: 450 }
+                },
+                {
+                    id: 5,
+                    nome: "Roberto Ferreira",
+                    cpf: "321.654.987-00",
+                    email: "roberto@exemplo.com",
+                    telefone: "(92) 93456-7890",
+                    endereco: "Sítio Recanto Verde",
+                    municipio: "Manaus",
+                    estado: "AM",
+                    cep: "69000-000",
+                    produtos: "Açaí, cupuaçu e castanhas",
+                    tamanho: 8,
+                    dap: true,
+                    coords: { x: 250, y: 200 }
+                }
+            ];
+            
+            // Adicionar ao array de agricultores
+            agricultores = sampleData;
+        }
+        
+        // Inicializar mapa
+        function initMap() {
+            // Preencher filtros de estado
+            const stateFilter = document.getElementById('map-filter-state');
+            if (stateFilter && stateFilter.options.length <= 1) {
+                const states = [...new Set(agricultores.map(a => a.estado))].sort();
+                states.forEach(state => {
+                    const option = document.createElement('option');
+                    option.value = state;
+                    option.textContent = state;
+                    stateFilter.appendChild(option);
+                });
+            }
+            
+            // Preencher filtros de produtos
+            const productFilter = document.getElementById('map-filter-product');
+            if (productFilter && productFilter.options.length <= 1) {
+                // Criar uma lista de produtos únicos
+                const allProducts = [];
+                agricultores.forEach(a => {
+                    const produtos = a.produtos.split(',').map(p => p.trim());
+                    produtos.forEach(p => {
+                        if (!allProducts.includes(p) && p) {
+                            allProducts.push(p);
+                        }
+                    });
+                });
+                
+                allProducts.sort().forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product;
+                    option.textContent = product;
+                    productFilter.appendChild(option);
+                });
+            }
+            
+            // Adicionar ouvintes de evento para os filtros
+            document.getElementById('map-filter-state').addEventListener('change', function() {
+                updateCityFilter(this.value);
+                updateMap();
+            });
+            
+            document.getElementById('map-filter-city').addEventListener('change', updateMap);
+            document.getElementById('map-filter-product').addEventListener('change', updateMap);
+            
+            // Atualizar o mapa
+            updateMap();
+        }
+        
+        // Atualizar filtro de cidades com base no estado selecionado
+        function updateCityFilter(state) {
+            const cityFilter = document.getElementById('map-filter-city');
+            
+            // Limpar opções atuais
+            cityFilter.innerHTML = '<option value="todos">Todos</option>';
+            
+            if (state === 'todos') {
+                return;
+            }
+            
+            // Filtrar cidades do estado selecionado
+            const cities = [...new Set(agricultores
+                .filter(a => a.estado === state)
+                .map(a => a.municipio))]
+                .sort();
+            
+            cities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                cityFilter.appendChild(option);
+            });
+        }
+        
+        // Atualizar o mapa com base nos filtros
+        function updateMap() {
+            const stateFilter = document.getElementById('map-filter-state').value;
+            const cityFilter = document.getElementById('map-filter-city').value;
+            const productFilter = document.getElementById('map-filter-product').value;
+            
+            // Filtrar agricultores
+            let filteredAgricultores = agricultores;
+            
+            if (stateFilter !== 'todos') {
+                filteredAgricultores = filteredAgricultores.filter(a => a.estado === stateFilter);
+            }
+            
+            if (cityFilter !== 'todos') {
+                filteredAgricultores = filteredAgricultores.filter(a => a.municipio === cityFilter);
+            }
+            
+            if (productFilter !== 'todos') {
+                filteredAgricultores = filteredAgricultores.filter(a => 
+                    a.produtos.toLowerCase().includes(productFilter.toLowerCase())
+                );
+            }
+            
+            // Atualizar contador
+            document.getElementById('map-count').textContent = filteredAgricultores.length;
+            
+            // Limpar marcadores existentes
+            const existingMarkers = document.querySelectorAll('.map-marker');
+            existingMarkers.forEach(marker => marker.remove());
+            
+            // Adicionar novos marcadores
+            const svgMap = document.getElementById('brazil-map');
+            
+            filteredAgricultores.forEach(agricultor => {
+                const marker = document.createElement('div');
+                marker.className = 'map-marker';
+                marker.style.left = `${agricultor.coords.x}px`;
+                marker.style.top = `${agricultor.coords.y}px`;
+                
+                const tooltip = document.createElement('div');
+                tooltip.className = 'tooltip';
+                tooltip.textContent = agricultor.nome;
+                
+                marker.appendChild(tooltip);
+                
+                // Adicionar evento de clique para mostrar detalhes
+                marker.addEventListener('click', function() {
+                    showAgricultorDetails(agricultor);
+                });
+                
+                document.getElementById('br-map').appendChild(marker);
+            });
+        }
+        
+        // Mostrar detalhes do agricultor
+        function showAgricultorDetails(agricultor) {
+            const detailsContainer = document.getElementById('map-details');
+            const detailsContent = document.getElementById('map-details-content');
+            
+            // Criar conteúdo HTML
+            let html = `
+                <p><strong>Nome:</strong> ${agricultor.nome}</p>
+                <p><strong>Município/Estado:</strong> ${agricultor.municipio}/${agricultor.estado}</p>
+                <p><strong>Produtos:</strong> ${agricultor.produtos}</p>
+                <p><strong>Tamanho da propriedade:</strong> ${agricultor.tamanho} hectares</p>
+                <p><strong>Possui DAP/CAF:</strong> ${agricultor.dap ? 'Sim' : 'Não'}</p>
+                <p><strong>Contato:</strong> ${agricultor.email} | ${agricultor.telefone}</p>
+            `;
+            
+            detailsContent.innerHTML = html;
+            detailsContainer.classList.remove('hidden');
+        }
+        
+        // Carregar notícias
+        async function loadNews() {
+            try {
+                // Mostrar estado de carregamento
+                document.getElementById('news-loading').classList.remove('hidden');
+                document.getElementById('news-container').classList.add('hidden');
+                document.getElementById('news-error').classList.add('hidden');
+                
+                // Verificar se a API Poe está disponível
+                if (window.Poe) {
+                    // Registrar handler para receber as notícias
+                    window.Poe.registerHandler("news-handler", (result) => {
+                        if (result.status === "error") {
+                            // Mostrar erro
+                            document.getElementById('news-loading').classList.add('hidden');
+                            document.getElementById('news-error').classList.remove('hidden');
+                        } else if (result.status === "complete") {
+                            try {
+                                // Tentar analisar o JSON das notícias
+                                const newsData = JSON.parse(result.responses[0].content);
+                                displayNews(newsData);
+                            } catch (error) {
+                                console.error("Erro ao processar as notícias:", error);
+                                document.getElementById('news-loading').classList.add('hidden');
+                                document.getElementById('news-error').classList.remove('hidden');
+                            }
+                        }
+                    });
+                    
+                    // Solicitar notícias ao Claude
+                    await window.Poe.sendUserMessage("@Claude-3.7-Sonnet Gere 5 notícias fictícias sobre agricultura familiar, agroecologia e alimentação saudável no Brasil. Inclua títulos, datas recentes (últimos 7 dias), resumos curtos (2-3 frases) e categorias (agricultura-familiar, agroecologia, programas-governo, alimentacao). Forneça APENAS o JSON em formato válido, sem explicações, sem formatação de código (sem ```) no formato: [{\"titulo\": \"...\", \"data\": \"dd/mm/yyyy\", \"resumo\": \"...\", \"categoria\": \"...\"}]", {
+                        handler: "news-handler",
+                        stream: false,
+                        openChat: false
+                    });
+                } else {
+                    // Carregar notícias de exemplo se a API Poe não estiver disponível
+                    setTimeout(() => {
+                        const exampleNews = generateExampleNews();
+                        displayNews(exampleNews);
+                    }, 1000);
+                }
+            } catch (error) {
+                console.error("Erro ao carregar notícias:", error);
+                document.getElementById('news-loading').classList.add('hidden');
+                document.getElementById('news-error').classList.remove('hidden');
+            }
+        }
+        
+        // Gerar notícias de exemplo (caso a API Poe não esteja disponível)
+        function generateExampleNews() {
+            return [
+                {
+                    titulo: "Novo programa de crédito para agricultura familiar é anunciado",
+                    data: "10/07/2023",
+                    resumo: "O governo federal anunciou uma nova linha de crédito específica para agricultores familiares com juros reduzidos. O programa visa estimular a produção agroecológica e deve beneficiar mais de 100 mil famílias.",
+                    categoria: "programas-governo"
+                },
+                {
+                    titulo: "Estudo confirma benefícios nutricionais de alimentos orgânicos",
+                    data: "08/07/2023",
+                    resumo: "Pesquisa da Embrapa comprova que alimentos orgânicos possuem maior teor de antioxidantes e menos resíduos de agrotóxicos. Especialistas recomendam consumo regular para melhoria da saúde.",
+                    categoria: "alimentacao"
+                },
+                {
+                    titulo: "Feira da Agricultura Familiar bate recorde de vendas em São Paulo",
+                    data: "07/07/2023",
+                    resumo: "Evento reuniu mais de 200 produtores de diferentes regiões do país e movimentou cerca de R$ 2 milhões em três dias. Produtos agroecológicos foram os mais procurados pelos consumidores.",
+                    categoria: "agricultura-familiar"
+                },
+                {
+                    titulo: "Sistemas agroflorestais ganham espaço na recuperação de áreas degradadas",
+                    data: "05/07/2023",
+                    resumo: "Técnicas que combinam cultivo de alimentos com preservação de espécies nativas mostram resultados promissores na recuperação de solos. Projeto piloto recuperou mais de 500 hectares no último ano.",
+                    categoria: "agroecologia"
+                },
+                {
+                    titulo: "PAA amplia orçamento para compra de produtos da agricultura familiar",
+                    data: "03/07/2023",
+                    resumo: "Programa de Aquisição de Alimentos terá aumento de 30% no orçamento para o próximo ano. Medida visa fortalecer a produção familiar e garantir alimentação saudável para instituições públicas.",
+                    categoria: "programas-governo"
+                }
+            ];
+        }
+        
+        // Exibir notícias
+        function displayNews(newsData) {
+            const newsContainer = document.getElementById('news-container');
+            
+            // Limpar contêiner
+            newsContainer.innerHTML = '';
+            
+            // Adicionar cada notícia
+            newsData.forEach(news => {
+                const newsCard = document.createElement('div');
+                newsCard.className = `bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md news-item ${news.categoria}`;
+                
+                // Determinar a cor da categoria
+                let categoryColor;
+                switch(news.categoria) {
+                    case 'agricultura-familiar':
+                        categoryColor = 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
+                        break;
+                    case 'agroecologia':
+                        categoryColor = 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+                        break;
+                    case 'programas-governo':
+                        categoryColor = 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
+                        break;
+                    case 'alimentacao':
+                        categoryColor = 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
+                        break;
+                    default:
+                        categoryColor = 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
+                }
+                
+                newsCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="text-lg font-bold">${news.titulo}</h3>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">${news.data}</span>
+                    </div>
+                    <p class="mb-4">${news.resumo}</p>
+                    <span class="px-2 py-1 rounded-full text-xs ${categoryColor}">${news.categoria.replace('-', ' ')}</span>
+                `;
+                
+                newsContainer.appendChild(newsCard);
+            });
+            
+            // Esconder o carregamento e mostrar as notícias
+            document.getElementById('news-loading').classList.add('hidden');
+            newsContainer.classList.remove('hidden');
+        }
+        
+        // Filtrar notícias por categoria
+        function filterNews(category) {
+            const newsItems = document.querySelectorAll('.news-item');
+            
+            newsItems.forEach(item => {
+                if (category === 'todos' || item.classList.contains(category)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+        
+        // Formatar dados de entrada nos inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            // Formatar CPF
+            const cpfInput = document.getElementById('cpf');
+            if (cpfInput) {
+                cpfInput.addEventListener('input', function() {
+                    let value = this.value.replace(/\D/g, '');
+                    if (value.length > 11) value = value.substring(0, 11);
+                    
+                    if (value.length > 9) {
+                        this.value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                    } else if (value.length > 6) {
+                        this.value = value.replace(/(\d{3})(\d{3})(\d+)/, '$1.$2.$3');
+                    } else if (value.length > 3) {
+                        this.value = value.replace(/(\d{3})(\d+)/, '$1.$2');
+                    } else {
+                        this.value = value;
+                    }
+                });
+            }
+            
+            // Formatar telefone
+            const telefoneInput = document.getElementById('telefone');
+            if (telefoneInput) {
+                telefoneInput.addEventListener('input', function() {
+                    let value = this.value.replace(/\D/g, '');
+                    if (value.length > 11) value = value.substring(0, 11);
+                    
+                    if (value.length > 10) {
+                        this.value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                    } else if (value.length > 6) {
+                        this.value = value.replace(/(\d{2})(\d{4})(\d+)/, '($1) $2-$3');
+                    } else if (value.length > 2) {
+                        this.value = value.replace(/(\d{2})(\d+)/, '($1) $2');
+                    } else {
+                        this.value = value;
+                    }
+                });
+            }
+            
+            // Formatar CEP
+            const cepInput = document.getElementById('cep');
+            if (cepInput) {
+                cepInput.addEventListener('input', function() {
+                    let value = this.value.replace(/\D/g, '');
+                    if (value.length > 8) value = value.substring(0, 8);
+                    
+                    if (value.length > 5) {
+                        this.value = value.replace(/(\d{5})(\d+)/, '$1-$2');
+                    } else {
+                        this.value = value;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
