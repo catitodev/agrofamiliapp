@@ -1,0 +1,34 @@
+# Agricultura Biodinâmica - Conhecimento Técnico
+
+## Princípios Fundamentais
+
+A Agricultura Biodinâmica foi criada por Rudolf Steiner em 1924, na Alemanha.
+
+### Preparados Biodinâmicos
+- **BD 500**: Stercus de vaca em chifre (50g/100L água)
+- **BD 501**: Sílica cristalina em chifre (2.5g/100L água)
+- **BD 502**: Yarrow + bexiga de cervo
+- **BD 503**: Camomila + intestino de animal
+- **BD 504**: Urtiga planta inteira
+- **BD 505**: Carvalho + crânio de animal
+- **BD 506**: Dente-de-leão + mesentério
+- **BD 507**: Valeriana + extrato aquoso
+- **BD 508**: Casca de salgueiro
+
+### Calendário Biodinâmico
+- Dias de Raiz: influencia raízes (estéril)
+- Dias de Folha: influencia folhas (estéril)
+- Dias de Fruto: influencia frutos (fértil)
+- Dias de Flor: influencia flores (fértil)
+
+### Dinamização
+- 500: 1 hora de dynamização, aplicar à tarde
+- 501: aplicar de manhã, não dynamizar
+
+## Ritmo Lunar
+- Lua crescente: favorece desenvolvimento aerial
+- Lua minguante: favorece raízes, poda, colheita de raízes
+
+## Referências
+- Rudolf Steiner - "Palestras sobre Agricultura"
+- SECAAF - Sociedade para Desenvolvimento da Agricultura Biodinâmica

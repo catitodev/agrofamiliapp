@@ -1,0 +1,34 @@
+# Agricultura Sintrópica - Conhecimento Técnico
+
+## Princípios Fundamentais
+
+A Agricultura Sintrópica foi desenvolvida por Ernst Götsch, e baseada na sucessão natural de vegetação e na estratificação de espécies.
+
+### Sucessão Natural
+1. **Fase Pioneira**: Espécies que preparam o solo (leguminosas, adubos verdes)
+2. **Fase Secundária**: Árvores de crescimento rápido, frutíferas
+3. **Fase Climática**: Espécies do clima local em equilíbrio
+
+### Estratificação (7 camadas - sistema Aby)
+1. emergentes (>25m)
+2. alto dossel (12-25m)
+3. médio dossel (8-12m)
+4. baixo dossel (5-8m)
+5. sub-bosque (2-5m)
+6. arbustivas (<2m)
+7. herbáceas e cobertura
+
+### Podas
+- Poda de formação: 4-6 meses
+- Frequência: quincenal a mensal
+- Biomassa: retorna ao solo como cobertura
+
+### SAFs - Sistemas Agroflorestais
+- Consórcio de culturas anuais com árvores
+- Rendimento por área superior a monocultura
+- Recuperação de pastagens degradadas
+
+## Referências
+- Ernst Götsch - "Introdução à Agricultura Sintrópica"
+- Aby - Projeto de SAF no Sul do Brasil
+- EMBRAPA - Sistemas Agroflorestais

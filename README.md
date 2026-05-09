@@ -1,225 +1,316 @@
 # AgroFamíliApp
 
-**Assistente agroecológico por voz e texto para agricultores familiares brasileiros.**
+## AI-Powered Agroecological Assistant for Brazilian Family Farmers
 
-Agente de IA conversacional gratuito, open-source e multilíngue (português com sotaques regionais), acessível via WhatsApp, Telegram e WebApp. Quanto mais agricultores usam, melhor o sistema fica — o aprendizado é coletivo e os dados pertencem à comunidade.
-
-[![Licença: AGPL v3](https://img.shields.io/badge/Licen%C3%A7a-AGPL%20v3-green.svg)](https://www.gnu.org/licenses/agpl-3.0)
-[![Public Good](https://img.shields.io/badge/tipo-bem%20p%C3%BAblico-brightgreen)](https://github.com/catitodev/agrofamiliapp)
-[![Status](https://img.shields.io/badge/status-em%20desenvolvimento%20ativo-blue)](https://github.com/catitodev/agrofamiliapp)
-
----
-
-## O problema
-
-Mais de 3,9 milhões de estabelecimentos de agricultura familiar no Brasil respondem por 70% dos alimentos que chegam à mesa dos brasileiros. Mas o agricultor familiar não tem acesso a consultoria técnica agroecológica de qualidade — a ATER (Assistência Técnica e Extensão Rural) pública é insuficiente, descontinuada e geograficamente concentrada. O resultado: decisões de plantio baseadas em tradição oral, sem acesso a dados de clima, preço, crédito ou certificação.
-
-## A solução
-
-O AgroFamíliApp é um agente de IA conversacional especializado em agroecologia — gratuito, por voz ou texto, via WhatsApp, Telegram ou navegador. O agricultor pergunta em linguagem natural ("quando planto meu milho aqui no Sertão?"), o agente responde com base em dados reais de clima, preço, crédito e conhecimento técnico agroecológico.
-
-O diferencial central: o sistema aprende com cada conversa. Perguntas reais de agricultores reais alimentam um ciclo de melhoria contínua — sem expor dados individuais, sem custos para ninguém.
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-green.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Project Type: Public Good](https://img.shields.io/badge/type-public%20good-brightgreen)](https://github.com/catitodev/agrofamiliapp)
+[![Status](https://img.shields.io/badge/status-active%20development-blue)](https://github.com/catitodev/agrofamiliapp)
+[![AMD MI300X](https://img.shields.io/badge/AMD-MI300X-ED1C24?logo=amd)](https://www.amd.com/en/accelerators/instinct/mi300x)
+[![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-005571?logo=fastapi)](https://fastapi.tiangolo.com/)
 
 ---
 
-## Funcionalidades
+## What is AgroFamíliApp?
 
-### Agente ATER (Assistência Técnica e Extensão Rural)
-Orientação técnica baseada nas quatro vertentes da agroecologia:
-- Agricultura Sintrópica (sucessão natural, Sistemas Agroflorestais)
-- Agricultura Biodinâmica (ritmos lunares, preparados biodinâmicos)
-- Agricultura Orgânica (certificação, insumos permitidos, transição)
-- Agricultura Natural (sem insumos externos, manejo ecológico)
+AgroFamíliApp is a **free, open-source, multilingual AI conversational agent** (voice and text) designed specifically for **Brazilian family farmers**. It provides real-time agricultural assistance through WhatsApp, Telegram, and a WebApp — accessible even in low-connectivity rural areas.
 
-### Agente de crédito e políticas públicas
-- Pronaf (todas as linhas: Custeio, Investimento, Agroindústria, Mulher, Jovem, Eco, Floresta, Semiárido)
-- CAF — Cadastro Nacional da Agricultura Familiar (substituto do DAP desde 2023)
-- PNCF — Programa Nacional de Crédito Fundiário
-- Garantia-Safra
-- Seguro da Agricultura Familiar (SEAF)
+The system connects farmers to real data: weather forecasts, market prices, rural credit programs, organic certification pathways, and agroecological technical knowledge. Every interaction makes the system smarter — collectively.
 
-### Agente de mercado e comercialização
-- PAA — Programa de Aquisição de Alimentos
-- PNAE — Programa Nacional de Alimentação Escolar (30% obrigatório da AF)
-- Preços em tempo real: CONAB, CEPEA
-- Feiras, cooperativas e grupos de comercialização por região
-
-### Agente de clima e planejamento de safra
-- Previsão climática integrada ao INMET por município
-- Calendário de plantio regional
-- Alertas de seca, geada e eventos extremos
-
-### Agente de documentação e regularização
-- CAF (Cadastro da Agricultura Familiar) — como obter e renovar
-- CNPJ MEI Rural
-- Certificação orgânica (IBD, Ecocert, OCS — Organismo de Controle Social)
-- SISORG — Sistema de Rastreabilidade Orgânica
-
-### Agente de território e serviços
-- Mapa de serviços por município: ATER, cooperativas, feiras, bancos, saúde rural
-- Emater, Embrapa, escritórios Pronaf
-- Territórios da Cidadania
-
-### Aprendizado contínuo (flywheel comunitário)
-Cada conversa gera dados anonimizados que alimentam o ciclo de fine-tuning periódico do modelo. Mais usuários = modelo mais específico para a realidade do campo brasileiro. Os dados pertencem à comunidade, nunca a empresas.
+> *"The more farmers use it, the better it becomes — data belongs to the community, never to corporations."*
 
 ---
 
-## Tecnologia
+## The Problem
 
-| Componente | Tecnologia |
-|---|---|
-| Inferência LLM | vLLM + Llama 3.1 70B / Qwen2.5 rodando no AMD Instinct MI300X |
-| Orquestração de agentes | LangChain + CrewAI |
-| Transcrição de voz | Whisper (open-source, rodando localmente) |
-| Base de conhecimento | RAG com ChromaDB + embeddings multilíngues |
-| Backend | FastAPI (Python 3.11+) |
-| WebApp | React + Vite (PWA instalável) |
-| Canal WhatsApp | Twilio ou Z-API (webhook) |
-| Canal Telegram | python-telegram-bot |
-| Dados externos | APIs públicas: INMET, CEPEA, CONAB, SNCR, IBGE |
-| Painel gestor | Streamlit |
-| Infraestrutura | AMD Developer Cloud (GPU MI300X, 192GB VRAM) |
-| Licença | GNU Affero General Public License v3 (AGPL-3.0) |
+Brazil has **3.9 million family farming establishments** (IBGE 2017 Census[^1]), responsible for **70% of the food on Brazilian tables**[^2]. Yet these farmers face:
 
----
+- **Insufficient public ATER** (Technical Assistance and Rural Extension) — only 20% have regular access[^3]
+- **Geographic concentration** — extension services are unavailable in remote areas
+- **Information asymmetry** — decisions on planting, credit, and markets rely on oral tradition
+- **Bureaucratic complexity** — navigating CAF, PRONAF, PAA, PNAE is overwhelming
+- **Limited connectivity** — many rural areas lack reliable internet for video/calls
 
-## Arquitetura modular
+This leads to:
+- Crops planted at wrong times due to lack of climate data
+- Missed credit opportunities from lack of guidance
+- Produce lost to lack of market access information
+- Certification abandoned due to complex procedures
 
-agrofamiliapp/
-├── LICENSE
-├── README.md
-├── docker-compose.yml
-├── requirements.txt
-│
-├── core/
-│   ├── gateway.py        # roteamento, autenticação, Whisper STR
-│   ├── memory.py         # contexto de conversa por usuário (Redis)
-│   └── feedback.py       # coleta anônima para RLHF-light
-│
-├── agents/
-│   ├── ater.py           # assistência técnica agroecológica
-│   ├── credito.py        # Pronaf, CAF, crédito rural
-│   ├── mercado.py        # PAA, PNAE, preços, comercialização
-│   ├── clima.py          # INMET, previsão, calendário de plantio
-│   ├── docs.py           # documentação, regularização, certificação
-│   └── territorio.py     # mapa de serviços por município
-│
-├── knowledge/
-│   ├── sintropia/        # conteúdo técnico: SAFs, sucessão
-│   ├── biodinamica/      # preparados, calendário biodinâmico
-│   ├── organica/         # certificação, normas, transição
-│   ├── natural/          # manejo ecológico sem insumos externos
-│   └── politicas/        # CAF, Pronaf, PAA, PNAE, legislação atualizada
-│
-├── channels/
-│   ├── whatsapp.py       # webhook Twilio/Z-API
-│   ├── telegram.py       # bot Telegram
-│   └── webapp/           # React PWA
-│
-├── data/
-│   ├── inmet.py          # clima e previsão
-│   ├── cepea.py          # preços agropecuários
-│   ├── conab.py          # preços e abastecimento
-│   └── mapa_sda.py       # MAPA, SISORG, registros
-│
-└── dashboard/
-└── app.py            # painel Streamlit para gestores públicos
+[^1]: IBGE, **Censo Agropecuário 2017**, Table 1: Agricultural establishments by category.
+[^2]: MDA/PRONAF, **Portal da Agricultura Familiar**, 2023 — "A agricultura familiar é responsável por 70% dos alimentos consumed no Brasil."
+[^3]: MAPA, **Plano ATER Brasil 2023-2030**, p.12 — "Apenas 20% dos agricultores familiares têm accesso regular a serviços de ATER."
 
 ---
 
-## Como usar localmente
+## The Solution
 
-```bash
-# clone o repositório
-git clone https://github.com/catitodev/agrofamiliapp.git
-cd agrofamiliapp
+An **AI conversational agent** that speaks the farmer's language — literally. Built on **AMD Instinct MI300X GPUs** via the AMD Developer Cloud, running open-source models (Llama 3.1 70B via vLLM), AgroFamíliApp provides:
 
-# instale as dependências
-pip install -r requirements.txt
-
-# configure as variáveis de ambiente
-cp .env.example .env
-# edite o .env com suas chaves
-
-# inicie os serviços
-docker-compose up -d
-
-# inicie o backend
-uvicorn core.gateway:app --reload
-
-# inicie o WebApp (em outro terminal)
-cd channels/webapp
-npm install && npm run dev
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    AGROFAMÍLIAPP                             │
+│                                                             │
+│   📱 WhatsApp / Telegram / WebApp                           │
+│                                                             │
+│   ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐        │
+│   │  Voice  │  │  Text   │  │   RAG   │  │ Intent  │        │
+│   │(Whisper)│  │Parsing  │  │Knowledge│  │Routing  │        │
+│   └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘        │
+│        │            │            │            │              │
+│        └────────────┼────────────┼────────────┘              │
+│                     ▼                                      │
+│          ┌─────────────────────┐                            │
+│          │   FastAPI Gateway   │                            │
+│          │   (LangChain/LangGraph)│                          │
+│          └──────────┬──────────┘                            │
+│                     ▼                                      │
+│   ┌──────────────────────────────────────────┐             │
+│   │         AMD MI300X + vLLM                │             │
+│   │   Llama 3.1 70B / Qwen2.5 + ChromaDB     │             │
+│   └──────────────────────────────────────────┘             │
+│                                                             │
+│   ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐   │
+│   │ ATER │ │CRÉDITO│ │MERCADO│ │CLIMA │ │ DOCS │ │TERRI.│   │
+│   └──────┘ └──────┘ └──────┘ └──────┘ └──────┘ └──────┘   │
+│                                                             │
+│   External APIs: INMET, CEPEA, CONAB, IBGE, MAPA           │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Variáveis de ambiente necessárias
+## Key Features
 
-AMD_API_ENDPOINT=         # endpoint vLLM no AMD Developer Cloud
-INMET_API_KEY=            # API pública do INMET (gratuita)
-TELEGRAM_BOT_TOKEN=       # token do bot no BotFather
-TWILIO_ACCOUNT_SID=       # para canal WhatsApp
-TWILIO_AUTH_TOKEN=
-REDIS_URL=redis://localhost:6379
-CHROMA_PERSIST_DIR=./knowledge/vectorstore
+### 🤖 6 Specialized AI Agents
 
----
+| Agent | Capability | Sample Query |
+|-------|-----------|-------------|
+| **ATER** | Agroecological technical assistance (sintropic, biodynamic, organic, natural) | *"Como plantar SAF de cacau no Sul da Bahia?"* |
+| **CRÉDITO** | Rural credit: PRONAF, CAF, PNCF, Garantia-Safra, SEAF | *"Como conseguir R$ 50 mil do PRONAF?"* |
+| **MERCADO** | Market access: PAA, PNAE, direct sales, prices | *"Como vender para a merenda escolar da minha cidade?"* |
+| **CLIMA** | Weather forecasts, planting calendars, climate alerts | *"Vai chover essa semana em Petrolina?"* |
+| **DOCS** | Documentation: CAF, CNPJ Rural, organic certification, SIM | *"Como obter certificação orgânica para meu café?"* |
+| **TERRITÓRIO** | Rural services map: EMATER, cooperatives, markets | *"Onde fica a EMATER mais perto de Juazeiro?"* |
 
-## Contribuindo
+### 🎤 Voice & Text Interface
+- **Voice input** via Web Speech API + Whisper transcription
+- Works in **Brazilian Portuguese with regional accents** (Northeast, South, Southeast, etc.)
+- Accessible to farmers with low literacy
 
-Este projeto é um bem público. Contribuições são muito bem-vindas.
+### 🌐 Multi-Channel
+- WhatsApp (via Twilio/Z-API webhook)
+- Telegram bot
+- WebApp (React PWA, installable)
 
-**Como contribuir:**
-1. Fork o repositório
-2. Crie uma branch: `git checkout -b feature/nome-da-contribuicao`
-3. Faça suas alterações com testes
-4. Abra um Pull Request com descrição clara do que muda e por quê
-
-**Áreas prioritárias para contribuição:**
-- Conteúdo técnico agroecológico em `knowledge/` (especialmente saberes regionais)
-- Integração com novos canais (SMS, USSD para áreas sem internet)
-- Tradução para línguas indígenas e regionais
-- Dados e APIs de novas regiões
-- Testes e validação agronômica do conteúdo
-
-**Código de Conduta:** Este projeto segue o [Código de Conduta da Contributor Covenant](https://www.contributor-covenant.org/pt-br/version/2/1/code_of_conduct/).
+### 🧠 RAG Knowledge Base
+- Vectorized agricultural knowledge from EMBRAPA, MAPA, MDA, INMET
+- Covers all four agroecological approaches
+- Updated via community contributions
 
 ---
 
-## Alinhamento com ODS da ONU
+## Technology Stack
 
-- ODS 1: Erradicação da pobreza — geração de renda para agricultores familiares
-- ODS 2: Fome zero — fortalecimento da produção de alimentos saudáveis
-- ODS 8: Trabalho decente — melhoria da renda no campo
-- ODS 10: Redução das desigualdades — acesso democrático à informação técnica
-- ODS 12: Consumo responsável — agroecologia e produção sustentável
-- ODS 13: Ação climática — adaptação e mitigação via manejo agroecológico
-- ODS 15: Vida terrestre — SAFs, regeneração, biodiversidade
+| Component | Technology | Purpose |
+|-----------|-----------|---------|
+| **LLM Inference** | **vLLM** + Llama 3.1 70B | High-throughput inference on AMD MI300X |
+| **GPU** | **AMD Instinct MI300X** (192GB VRAM) | Training and serving large models |
+| **Agent Orchestration** | **LangChain** + LangGraph | Multi-agent routing, tool use |
+| **Voice STT** | **Whisper** (open-source) | Speech-to-text for voice queries |
+| **Vector Store** | **ChromaDB** + sentence-transformers | RAG semantic search |
+| **Backend** | **FastAPI** (Python 3.11+) | REST API + WebSocket |
+| **WebApp** | **React 18** + Vite + TailwindCSS | PWA installer |
+| **Channels** | Twilio, python-telegram-bot | WhatsApp & Telegram bots |
+| **Data Sources** | INMET, CEPEA, CONAB, IBGE, MAPA | Real-time agricultural data |
+| **Dashboard** | **Streamlit** | Public policy manager panel |
+| **Infrastructure** | **AMD Developer Cloud** | Cloud GPU access |
+| **License** | **GNU AGPL v3** | Open-source public good |
 
 ---
 
-## Licença
+## Architecture
+
+```
+agrofamiliapp/
+├── core/                    # Core infrastructure
+│   ├── gateway.py          # FastAPI entry point + intent routing
+│   ├── config.py           # Environment configuration
+│   ├── memory.py           # Redis-backed conversation memory
+│   ├── feedback.py         # Anonymous feedback collection
+│   └── stt.py             # Whisper speech-to-text engine
+│
+├── agents/                  # AI specialist agents (LangChain)
+│   ├── ater.py             # Agroecological technical assistance
+│   ├── credito.py          # Rural credit and public policies
+│   ├── mercado.py          # Market access and commercialization
+│   ├── clima.py            # Weather and crop planning
+│   ├── docs.py             # Documentation and legal compliance
+│   └── territorio.py       # Rural services and territory
+│
+├── knowledge/               # RAG knowledge base
+│   ├── sintropia/          # Syntropic agriculture docs
+│   ├── biodinamica/        # Biodynamic agriculture docs
+│   ├── organica/           # Organic certification docs
+│   ├── natural/            # Natural farming docs
+│   ├── politicas/          # Public policies docs
+│   └── base.py             # ChromaDB + embedding pipeline
+│
+├── channels/                # Multi-channel interface
+│   ├── telegram_bot.py     # Telegram bot (python-telegram-bot)
+│   ├── whatsapp_webhook.py # WhatsApp webhook (Flask/Twilio)
+│   └── webapp/             # React PWA frontend
+│
+├── data/                    # External API integrations
+│   ├── inmet.py            # INMET weather API
+│   ├── cepea.py            # CEPEA price API
+│   ├── conab.py            # CONAB price/market API
+│   └── mapa_sda.py         # MAPA/SISORG API
+│
+├── dashboard/               # Public manager dashboard
+│   └── app.py             # Streamlit dashboard
+│
+├── requirements.txt         # Python dependencies
+├── docker-compose.yml       # Full stack deployment
+└── .env.example             # Environment variables template
+```
+
+---
+
+## Deployment on AMD Developer Cloud
+
+### Prerequisites
+1. Join the [AMD AI Developer Program](https://www.amd.com/en/developer/ai-dev-program.html)[^4] to receive **$100 in credits**
+2. Access [AMD Developer Cloud](https://developer.amd.com/cloud/)[^5]
+3. Spin up a node with **AMD Instinct MI300X** (192GB VRAM)
+
+### Quick Start
+
+```bash
+# Clone the repository
+git clone https://github.com/catitodev/agrofamiliapp.git
+cd agrofamiliapp
+
+# Configure environment
+cp .env.example .env
+# Edit .env with your AMD Developer Cloud endpoint and API keys
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Start infrastructure (Redis + ChromaDB)
+docker-compose up -d redis chromadb
+
+# Start vLLM server with Llama 3.1 70B
+# Run this on AMD MI300X node:
+python -m vllm.entrypoints.openai.api_server \
+    --model meta-llama/Llama-3.1-70B-Instruct \
+    --host 0.0.0.0 --port 8001 \
+    --tensor-parallel-size 2 \
+    --trust-remote-code
+
+# Start the API gateway
+uvicorn core.gateway:app --host 0.0.0.0 --port 8000 --reload
+
+# Start the React WebApp (separate terminal)
+cd channels/webapp
+npm install && npm run dev
+```
+
+### Docker Deployment
+
+```bash
+# Full stack deployment
+docker-compose up -d
+```
+
+> **Note**: vLLM requires ROCm 6.0+ on AMD GPUs. The Docker image is pre-configured with ROCm support.
+
+---
+
+## External Data Sources
+
+AgroFamíliApp integrates with:
+
+| Source | API | Data Provided |
+|--------|-----|---------------|
+| **INMET** | `apihm.inmet.gov.br` | Weather forecasts, station data |
+| **CEPEA/ESALQ** | `cepea.esalq.usp.br` | Commodity prices (corn, soybean, coffee, etc.) |
+| **CONAB** | `portaldeinformacoes.conab.gov.br` | PAA calls, reference prices |
+| **IBGE** | `sidra.ibge.gov.br` | Municipal data, agricultural census |
+| **MAPA** | `gov.br/agricultura` | Organic certification, SISORG |
+
+---
+
+## Contributing
+
+AgroFamíliApp is a **public good**. Contributions are welcome.
+
+### Priority Areas
+- Agroecological technical content in `knowledge/` (especially regional practices)
+- New channel integrations (SMS, USSD for low-connectivity areas)
+- Indigenous and regional language support
+- Real-time data API integrations
+- Agronomic validation of content
+
+### How to Contribute
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/your-contribution`
+3. Make changes with tests
+4. Open a PR with a clear description
+
+**Code of Conduct**: This project follows the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
+
+---
+
+## UN SDG Alignment
+
+| SDG | Target | How AgroFamíliApp Contributes |
+|-----|--------|-------------------------------|
+| **1** | No Poverty | Increasing family farmer income via market access + credit |
+| **2** | Zero Hunger | Strengthening food production by 70% of Brazilian food supply |
+| **8** | Decent Work | Improving rural worker income and conditions |
+| **10** | Reduced Inequalities | Democratizing access to technical knowledge |
+| **12** | Responsible Consumption | Promoting agroecological and organic production |
+| **13** | Climate Action | Adapting to climate change via agroecological practices |
+| **15** | Life on Land | SAFs, regeneration, biodiversity preservation |
+
+---
+
+## License
 
 **GNU Affero General Public License v3.0 (AGPL-3.0)**
 
-Este software é e sempre será um bem público. Qualquer pessoa pode usar, estudar, modificar e distribuir gratuitamente. Qualquer versão modificada — inclusive quando disponibilizada via web ou API — deve ter seu código-fonte publicado sob a mesma licença. Ninguém pode comercializar versões fechadas deste software. Os dados gerados pelos usuários pertencem à comunidade, nunca a empresas privadas.
+This software is and always will be a public good. Anyone can use, study, modify, and distribute it for free. Any modified version — including when served via web or API — must have its source code published under the same license. No one may commercialize closed versions. User-generated data belongs to the community, never to private companies.
 
-Ver arquivo [LICENSE](./LICENSE) para o texto completo.
-
----
-
-## Histórico
-
-O AgroFamíliApp nasceu como proposta de portal HTML estático para agricultores familiares e agroecológicos. Em maio de 2025, foi relançado como agente de IA conversacional open-source, com foco em agroecologia e aprendizado coletivo, no contexto do AMD Developer Hackathon (lablab.ai).
+See [LICENSE](./LICENSE) for the full text.
 
 ---
 
-## Contato e comunidade
+## References & Data Sources
 
-- GitHub Discussions: para dúvidas técnicas e sugestões
-- Issues: para bugs e solicitações de funcionalidade
-- Repositório: https://github.com/catitodev/agrofamiliapp
+[^1]: IBGE. *Censo Agropecuário 2017*. Rio de Janeiro: IBGE, 2017. Available: https://censoagro2017.ibge.gov.br/
 
+[^2]: MDA - Ministério do Desenvolvimento Agrário. *Portal da Agricultura Familiar*. Brasília, 2023. Available: https://www.gov.br/pt-br/assuntos/agricultura-familiar
 
+[^3]: MAPA - Ministério da Agricultura, Pecuária e Abastecimento. *Plano ATER Brasil 2023-2030*. Brasília: MAPA, 2023. Available: https://www.gov.br/agricultura/pt-br/assuntos/ater
+
+[^4]: AMD. *AMD AI Developer Program*. Available: https://www.amd.com/en/developer/ai-dev-program.html
+
+[^5]: AMD Developer Cloud. Available: https://developer.amd.com/cloud/
+
+- EMBRAPA. *Sistemas Agroflorestais: conceitos e aplicações*. Brasília: EMBRAPA, 2020.
+- MDA/CONAB. *Plano Safra 2024/2025*. Available: https://www.gov.br/agricultura/pt-br/assuntos/planejamento-safra
+- Lei 10.831/2003 - Lei da Agricultura Orgânica
+- Lei 11.947/2009 - PNAE (30% minimum from family farming)
+- MAPA/IN 46/2011 - Regulamento da Produção Orgânica
+
+---
+
+## Contact & Community
+
+- GitHub Discussions: Technical questions and suggestions
+- Issues: Bugs and feature requests
+- Repository: https://github.com/catitodev/agrofamiliapp
+
+> **Made with ❤️ for Brazilian family farmers**

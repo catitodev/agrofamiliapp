@@ -1,0 +1,58 @@
+# Políticas Públicas - Agricultura Familiar
+
+## PRONAF - Programa Nacional de Fortalecimento da Agricultura Familiar
+
+### Linhas de Crédito 2024/2025 (Plano Safra)
+- **PRONAF Custeio**: até R$ 400.000 - juros 3%
+- **PRONAF Investimento**: até R$ 400.000 - juros 3%
+- **PRONAF Mais Alimentos**: até R$ 200.000 - juros 4%
+- **PRONAF Agroecologia**: até R$ 100.000 - juros 2%
+- **PRONAF Floresta**: até R$ 50.000 - juros 2%
+- **PRONAF Mulher**: até R$ 100.000 - juros 2%
+- **PRONAF Jovem**: até R$ 40.000 - juros 3%
+
+### Requisitos
+- CAF ou DAP ativa
+- Renda bruta anual até R$ 500.000 (exceto Jovem)
+- No mínimo 75% renda familiar da agricultura
+- Aptidão para atividade rural
+
+## CAF - Cadastro Nacional da Agricultura Familiar
+
+Substitui DAP desde 2023. Requisitos:
+- Módulo fiscal do município × 4 = área máxima
+- Renda bruta familiar até R$ 500.000/ano
+- 75% renda familiar de atividade agropecuária
+
+## PAA - Programa de Aquisição de Alimentos
+
+Limites 2023:
+- R$ 15.000/família/ano (exceto organizações)
+- R$ 8.000/membro/ano para OAF
+- PAA Leite: R$ 4.000/família/ano
+
+## PNAE - Programa Nacional de Alimentação Escolar
+
+Lei 11.947/2009:
+- 30% mínimos para agricultura familiar
+- Limite R$ 20.000/familiar/ano
+- Prioridade: produtores locais
+
+## Garantia-Safra
+
+Para municípios do Semiárido:
+- Perda > 50% da lavoura por seca/geada
+- R$ 850 por família (2023)
+- Fundo Garantia-Safra com contribuições municipalities/federal
+
+## SEAF - Seguro da Agricultura Familiar
+
+Vinculado ao PRONAF Custeio:
+- Premio: 3% do valor financiado
+- Cobertura: 70% da perda
+- Eventos: seca, geada, granizo, excesso chuva, doenças
+
+## Referências
+- MDA - Ministério do Desenvolvimento Agrário
+- MAPA - Plano Safra 2024/2025
+- CONAB - Políticas Públicas para Agricultura Familiar

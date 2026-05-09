@@ -1,0 +1,50 @@
+# Agricultura Orgânica - Conhecimento Técnico
+
+## Lei 10.831/2003
+Define agricultura orgânica como sistema que adota métodos específicos de produção e processamento.
+
+### Insumos Permitidos
+- Adubos orgânicos (composto, vermicomposto)
+- Bokashi
+- Biofertilizantes
+- Manipueira
+- Cinza, calcário, fosfato natural
+- Calda bordalesa, calda sulfocálcica
+- Baculovirus, Beauveria, Metarhizium
+- Trichograma, Phytoseiidae
+- Bactérias: Bacillus thuringiensis
+
+### Insumos Proibidos
+- Fertilizantes sintéticos
+- Agrotóxicos químicos
+- Hormônios de crescimento
+- Antibióticos (uso profilático)
+- OGM (organismos geneticamente modificados)
+
+## Certificação Orgânica
+
+### OCS - Organismo de Controle Social
+- Para venda direta sem intermediaries
+- Grupo de até 20 produtores
+- Declaração de produção própria
+- Controle social por lista
+
+### Certificação por Terceira Parte
+- **IBD** (Instituto Biodinâmico): www.ibd.com.br
+- **Ecocert**: www.ecocert.com.br
+- **IMO**: www.imo.ch
+- **Pro-Cert**: www.pro-cert.com.br
+
+### Prazo de Transição
+- Mínimo 12 meses para culturas anuais
+- 18 meses para semi-perenes
+- 36 meses para culturas perenes
+
+### SISORG
+- Sistema de rastreabilidade do MAPA
+- Registro obrigatório para exportadores
+
+## Referências
+- MAPA - Ministério da Agricultura, Pecuária e Abastecimento
+- Lei 10.831/2003 - Lei da Agricultura Orgânica
+- IN 46/2011 - Regulamento da Produção Orgânica

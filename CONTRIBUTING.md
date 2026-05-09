@@ -1,87 +1,38 @@
-# Como contribuir com o AgroFamíliApp
+# AgroFamiliarApp
 
-Obrigada por querer contribuir! Este projeto é um bem público digital,
-construído coletivamente para servir agricultores familiares brasileiros.
-Toda contribuição é bem-vinda — código, conteúdo agroecológico, traduções,
-correções, relatos de uso real no campo.
+## Contributing Guidelines
 
-## Princípios que guiam este projeto
+We welcome contributions from the community! This project is a public good for Brazilian family farmers.
 
-- Agroecologia como base epistêmica, não apenas técnica
-- Linguagem acessível ao agricultor, não ao desenvolvedor
-- Gratuito para sempre, para todos, sem exceção
-- Conhecimento tradicional tem o mesmo peso que conhecimento acadêmico
-- Decisões coletivas, crédito coletivo
+## How to Contribute
 
-## O que você pode contribuir
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/your-feature`
+3. **Make your changes** with tests
+4. **Commit**: `git commit -m "Add: your feature"`
+5. **Push**: `git push origin feature/your-feature`
+6. **Open a Pull Request**
 
-### Conteúdo e conhecimento
-- Textos sobre agricultura sintrópica, biodinâmica, orgânica e natural
-- Correções de nomenclatura (ex: DAP foi substituída pela CAF em 2023)
-- Informações sobre políticas públicas atualizadas (Pronaf, PAA, PNAE, etc.)
-- Saberes tradicionais e práticas regionais documentadas com consentimento
-- Revisão de respostas do agente que estejam imprecisas ou desatualizadas
+## Priority Areas
 
-### Código
-- Novos agentes especializados
-- Integrações com APIs públicas (INMET, CONAB, CEPEA, MAPA, IBGE)
-- Melhorias nos canais (WhatsApp, Telegram, WebApp)
-- Otimizações de performance na inferência (AMD ROCm / vLLM)
-- Testes automatizados
-- Acessibilidade e suporte a baixa conectividade
+- Agroecological technical content in `knowledge/` (regional practices)
+- New channel integrations (SMS, USSD for low-connectivity)
+- Indigenous and regional language support
+- Real-time data API integrations
+- Agronomic validation of content
 
-### Comunidade
-- Relatos de uso real — o que funcionou, o que não funcionou
-- Tradução para línguas indígenas ou crioulas faladas em comunidades rurais
-- Documentação em linguagem simples
-- Divulgação em cooperativas, sindicatos rurais, escolas do campo
+## Code Standards
 
-## Como submeter uma contribuição
+- Python: Follow PEP 8
+- JavaScript: Follow ESLint configuration
+- Write docstrings for functions
+- Add type hints where possible
+- Test before submitting
 
-### Para contribuições de conteúdo/conhecimento
-1. Abra uma **Issue** com o rótulo `conhecimento`
-2. Descreva a informação, cite a fonte se houver
-3. Indique a região/contexto de aplicabilidade
-4. Um mantenedor vai revisar e incorporar à base RAG
+## Questions?
 
-### Para contribuições de código
-1. Faça um **fork** do repositório
-2. Crie um branch com nome descritivo:
-   `git checkout -b feat/agente-clima-nordeste`
-3. Faça commits pequenos e descritivos em português:
-   `git commit -m "adiciona previsão de seca para região semiárida"`
-4. Abra um **Pull Request** descrevendo o que muda e por quê
-5. Aguarde revisão — respondemos em até 7 dias
+Open an issue on GitHub or start a Discussion.
 
-### Para reportar problemas
-- Abra uma **Issue** com o rótulo `bug` ou `conteúdo incorreto`
-- Se for uma resposta errada do agente, cole o exemplo da conversa
-- Se for dado desatualizado, indique a fonte correta
+## License
 
-## Padrões de código
-
-- Python 3.11+
-- Formatação: `black` + `isort`
-- Docstrings em português
-- Nomes de variáveis em português ou inglês — seja consistente dentro do módulo
-- Testes com `pytest`
-- Nenhuma dependência proprietária — apenas bibliotecas compatíveis com AGPL
-
-## Padrões de conteúdo
-
-- Português brasileiro, linguagem simples
-- Evitar jargão técnico sem explicação
-- Sempre indicar se uma informação é regional (não generalize o Brasil)
-- Políticas públicas: sempre incluir data de referência da informação
-- Não incluir conteúdo de fontes que proíbam redistribuição
-
-## Créditos
-
-Toda contribuição aceita é registrada no arquivo `CONTRIBUTORS.md`.
-Contribuições de conhecimento tradicional são atribuídas à comunidade
-ou pessoa indicada — nunca anonimizadas sem consentimento explícito.
-
-## Dúvidas
-
-Abra uma Issue com o rótulo `pergunta` ou entre em contato pelo canal
-oficial do projeto. Não existe pergunta boba aqui.
+This project is licensed under GNU AGPL v3.

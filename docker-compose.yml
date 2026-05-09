@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: agrofamiliapp-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - AMD_API_ENDPOINT=${AMD_API_ENDPOINT:-http://vllm:8001/v1}
+      - AMD_API_KEY=${AMD_API_KEY:-EMPTY}
+      - MODEL_NAME=${MODEL_NAME:-meta-llama/Llama-3.1-70B-Instruct}
+      - INMET_API_KEY=${INMET_API_KEY:-}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID:-}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN:-}
+      - REDIS_URL=redis://redis:6379
+      - CHROMA_PERSIST_DIR=/app/knowledge/vectorstore
+    volumes:
+      - ./knowledge:/app/knowledge
+      - ./data:/app/data
+      - ./agents:/app/agents
+      - ./core:/app/core
+    depends_on:
+      - redis
+      - chromadb
+    command: uvicorn core.gateway:app --host 0.0.0.0 --port 8000 --reload
+    shm_size: '256mb'
+
+  vllm:
+    image: vllm/vllm-openai:latest-rocm
+    container_name: agrofamiliapp-vllm
+    ports:
+      - "8001:8000"
+    environment:
+      - ROCM_PATH=/opt/rocm
+    volumes:
+      - vllm-models:/models
+    command: >
+      --model meta-llama/Llama-3.1-70B-Instruct
+      --host 0.0.0.0
+      --port 8000
+      --gpu-memory-utilization 0.90
+      --max-model-len 8192
+      --trust-remote-code
+      --dtype half
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: amd.com
+              count: 1
+              capabilities: [gpu]
+
+  redis:
+    image: redis:7-alpine
+    container_name: agrofamiliapp-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: agrofamiliapp-chroma
+    ports:
+      - "8002:8000"
+    volumes:
+      - chroma-data:/data
+
+  webapp:
+    build:
+      context: ./channels/webapp
+      dockerfile: Dockerfile
+    container_name: agrofamiliapp-webapp
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+
+volumes:
+  redis-data:
+  chroma-data:
+  vllm-models:
