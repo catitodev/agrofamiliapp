@@ -1,0 +1,17 @@
+# Linguist language detection
+**/.py linguist-detectable=true
+**/*.py linguist-detectable=true
+**/*.jsx linguist-detectable=true
+**/*.js linguist-detectable=true
+**/*.tsx linguist-detectable=true
+**/*.ts linguist-detectable=true
+
+# Explicitly set types
+*.py linguist-language=Python
+*.jsx linguist-language=JavaScript
+*.js linguist-language=JavaScript
+*.html linguist-language=HTML
+
+# Exclude large files from language stats
+**/node_modules/** linguist-vendored
+**/knowledge/vectorstore/** linguist-generated
